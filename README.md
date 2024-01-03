@@ -1,4 +1,4 @@
-# azure-api-center-load-apim
+# APIM to API Center Load Generator
 
 Gets a list of APIs from Azure API Management Gateway (APIM) and loads them into Azure API Center. Total proof of concept to 'gen some load' for API Center for service evaluation. Can be extended to add custom metadata, etc..
 
