@@ -2,7 +2,7 @@
 
 Gets a list of APIs from Azure API Management Gateway (APIM) and loads them into Azure API Center. Total proof of concept to 'gen some load' for API Center for service evaluation. Can be extended to add custom metadata, etc..
 
-## Virtual env and pacakges
+## Virtual env and packages
 
 ```
 python3 -m venv .venv
