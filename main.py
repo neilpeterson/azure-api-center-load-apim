@@ -1,6 +1,6 @@
 import apic_apim_sync as apic
-import os
 import json
+import os
 
 def main():
     subscription_id = os.getenv("AZURE_SUBSCRIPTION_ID")
@@ -15,12 +15,15 @@ def main():
     # New instance of an API Center Service
     api_center_instanc = apic.apic_service(subscription_id, api_center_resource_group_name, api_center_name, api_center_workspace_name, api_center_rest_api_version)
     
-    # Get custom API metadata for API schem extension.
+    # Get custom API metadata for API schem and extend schema.
     apic_api_schema_instance = apic.apic_api_schema(api_center_instanc, custom_data_file_path)
     apic_api_schema_instance.extend_schema()
     
-    # Get APIM API metadata for API Center syncronization.
-    apim_apis = apic.get_apim_api(subscription_id, apim_resource_group_name, apim_name)
+    # New instance of an APIM service
+    apim_instance = apic.apim_service(subscription_id, apim_resource_group_name, apim_name)
+
+    # Get all APIs from APIM
+    apim_apis = apic.apim_api(apim_instance).get_all_apis()
 
     for api in apim_apis:
 

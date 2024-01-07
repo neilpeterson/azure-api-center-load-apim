@@ -1,6 +1,6 @@
 from azure.identity import DefaultAzureCredential
-import requests
 import json
+import requests
 
 class apic_api_schema():
     def __init__(self, api_center, custom_data_file_path):
