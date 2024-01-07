@@ -3,8 +3,8 @@
         "api": "apim-lab-app-service-eastus",
         "properties": [
             {
-                "metadata_one": "value_one",
-                "metadata_two": "value_two"
+                "service_tree": "6dd65f57-c342-4f49-a4b4-64741535902f",
+                "team_name": "team_east_us"
             }
         ]
     },
@@ -12,7 +12,9 @@
         "api": "apim-lab-app-service",
         "properties": [
             {
-                "metadata_one": "value_one"
+                "service_tree": "3525a463-25d9-44d2-8cb0-1a5b5bbb892d",
+                "team_name": "other team",
+                "test 1 2 3": "test 1 2 3"
             }
         ]
     }
