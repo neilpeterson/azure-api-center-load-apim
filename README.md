@@ -14,7 +14,8 @@ $env:API_CENTER_WORKSPACE_NAME = "default"
 $env:API_CENTER_REST_API_VERSION = "2024-03-01"
 $env:APIM_RESOURCE_GROUP_NAME = ""
 $env:APIM_NAME = ""
-$env:DATA_INJECT_DICT_PATH = ""
+$env:DATA_INJECT_DICT_PATH = "./data-injection/data-injection.json"
+$env:DOCUMENTATION_URL_STRING_FILTER = ""
 ```
 
 ## Custom metadata injection

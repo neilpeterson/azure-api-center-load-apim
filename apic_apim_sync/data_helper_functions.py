@@ -1,4 +1,5 @@
 import json
+import re
 
 def read_json_file(file_path):
     with open(file_path, 'r') as f:
@@ -10,6 +11,12 @@ def get_api_names(data):
     return api_names
 
 def return_custom_data_object(obj, api_name, is_property=False, current_api=None):
+
+    """
+    This function returns a JSON object with custom data properties for the given API.
+    This will be used to add custo data on the API Center API.
+    """
+    
     properties = {}
     if isinstance(obj, dict):
         for key, value in obj.items():
@@ -26,14 +33,15 @@ def return_custom_data_object(obj, api_name, is_property=False, current_api=None
 def get_custom_data_api_list(custom_data_file_path):
 
     """
-    This function returns a list of API names from the custom data file.
+    This function returns a list of API names found in the custom data file.
+    This list will be used to determine if an API needs to be added to the custom data file.
     """
 
     custom_data = read_json_file(custom_data_file_path)
     api_list = get_api_names(custom_data)
     return api_list
 
-def add_api_to_custom_data(custom_data_file_path, api_name, custom_data_key):
+def add_api_to_custom_data(custom_data_file_path, api_name, api_display_name, documentation_url, custom_data_key):
 
     """
     This function adds a new API to the custom data file.
@@ -41,7 +49,7 @@ def add_api_to_custom_data(custom_data_file_path, api_name, custom_data_key):
 
     properties_dict = {i: None for i in custom_data_key}
     custom_data = read_json_file(custom_data_file_path)
-    custom_data.append({'api': api_name, 'properties': properties_dict})
+    custom_data.append({'api': api_name, 'api_display_name': api_display_name, 'documentation_url': documentation_url, 'properties': properties_dict})
     with open(custom_data_file_path, 'w') as f:
         json.dump(custom_data, f, indent=4)
 
@@ -54,3 +62,10 @@ def gen_custom_data(custom_data_file_path, api_name):
     custom_data = read_json_file(custom_data_file_path)
     custom_data_object = return_custom_data_object(custom_data, api_name)
     return custom_data_object
+
+def get_documentation_url(api_description, documentation_url_string_filter):
+    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', api_description)
+
+    for url in urls:
+        if documentation_url_string_filter in url:
+            return url
