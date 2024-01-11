@@ -3,11 +3,12 @@ import json
 import requests
 
 class apic_api():
-    def __init__(self, api_center, api_name, api_description, custom_data):
+    def __init__(self, api_center, api_name, api_description, custom_data, documentation_url):
         self.api_center = api_center
         self.api_name = api_name
         self.api_description = api_description
         self.custom_data = custom_data
+        self.documentation_url = documentation_url
 
     def new_apic_api(self):
         
@@ -30,8 +31,14 @@ class apic_api():
             'properties': {
                 'title': self.api_name,
                 'kind': 'rest',
-                'description': self.api_description,
-                'customProperties': self.custom_data
+                # 'description': self.api_description, # Removing for now while we sort description parsing
+                'customProperties': self.custom_data,
+                'externalDocumentation': [
+                    {
+                        'title': 'API Documentation',
+                        'url': self.documentation_url
+                    }
+                ]
             }
         }
 
