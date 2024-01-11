@@ -3,9 +3,9 @@ import json
 import requests
 
 class apic_api_schema():
-    def __init__(self, api_center, custom_data_file_path):
+    def __init__(self, api_center, custom_data_key):
         self.api_center = api_center
-        self.custom_data_file_path = custom_data_file_path
+        self.custom_data_key = custom_data_key
 
     def extend_schema(self):
         
@@ -23,15 +23,7 @@ class apic_api_schema():
             'Content-Type': 'application/json'
         }
 
-        with open(self.custom_data_file_path) as f:
-            data = json.load(f)
-
-        # Get a list of all property keys, flattten, remove duplicates
-        property_keys = [list(item['properties'][0].keys()) for item in data]
-        property_keys = [key for sublist in property_keys for key in sublist]
-        property_keys = list(set(property_keys))
-
-        for key in property_keys:
+        for key in self.custom_data_key:
             url = f"https://management.azure.com/subscriptions/{self.api_center.subscription_id}/resourceGroups/{self.api_center.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.api_center.name}/metadataSchemas/{key}?api-version={self.api_center.api_center_rest_api_version}"
 
             body = {
@@ -47,4 +39,3 @@ class apic_api_schema():
             }
 
             response = requests.put(url, headers=headers, data=json.dumps(body))
-            # ADD some error handling here
