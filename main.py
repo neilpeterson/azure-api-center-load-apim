@@ -11,10 +11,11 @@ def main():
     apim_resource_group_name = os.getenv("APIM_RESOURCE_GROUP_NAME")
     apim_name = os.getenv("APIM_NAME")
     custom_data_file_path = os.getenv("DATA_INJECT_DICT_PATH")
+    apim_domain = os.getenv("APIM_DOMAIN")
     documentation_url_string_filter = os.getenv("DOCUMENTATION_URL_STRING_FILTER")
 
     # Custom data key to be used when scaffolding custom data file.
-    custom_data_key = ['service_tree_id', 'partner_facing']
+    custom_data_key = ['apim_api_url','service_tree_id', 'partner_facing']
 
     # New instance of an API Center Service.
     api_center_instance = apic.apic_service(subscription_id, api_center_resource_group_name, api_center_name, api_center_workspace_name, api_center_rest_api_version)
@@ -41,6 +42,9 @@ def main():
             # Add API scaffolding to custom data file. Values will then need to be added manually.
             apic.add_api_to_custom_data(custom_data_file_path, api.name, api.display_name, documentation_url, custom_data_key)
 
+        # Update API URL in custom data file.
+        apic.update_apim_api_url(custom_data_file_path, api.name, apim_domain, api.path)
+        
         # Generate custom data object for API data injection.
         custom_data = apic.gen_custom_data(custom_data_file_path, api.name)
 
