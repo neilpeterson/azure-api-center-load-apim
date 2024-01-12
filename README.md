@@ -16,6 +16,7 @@ $env:APIM_RESOURCE_GROUP_NAME = ""
 $env:APIM_NAME = ""
 $env:DATA_INJECT_DICT_PATH = "./data-injection/data-injection.json"
 $env:DOCUMENTATION_URL_STRING_FILTER = ""
+$env:APIM_DOMAIN = ""
 ```
 
 ## Custom metadata injection

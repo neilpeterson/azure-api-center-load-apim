@@ -69,3 +69,14 @@ def get_documentation_url(api_description, documentation_url_string_filter):
     for url in urls:
         if documentation_url_string_filter in url:
             return url
+        
+def update_apim_api_url(custom_data_file_path, api_name, apim_domain, api_path):
+    with open(custom_data_file_path, 'r') as api_data:
+        data = json.load(api_data)
+
+    for api in data:
+        if api['api'] == api_name:
+            api['properties']['apim_api_url'] = f'{apim_domain}/{api_path}'
+
+    with open(custom_data_file_path, 'w') as api_data:
+        json.dump(data, api_data, indent=4)
