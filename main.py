@@ -24,35 +24,38 @@ def main():
     apic_api_schema_instance = apic.apic_api_schema(api_center_instance, custom_data_key)
     apic_api_schema_instance.extend_schema()
     
-    # Get all API's from API Gateway (APIM) and remove APIs with ';rev=' in the name, we don't currnelty care about revisions.
+    # Get all API's from API Gateway (APIM) and remove APIs with ';rev=' in the name, we don't currently care about revisions.
     apim_instance = apic.apim_service(subscription_id, apim_resource_group_name, apim_name)
     apim_apis = apic.apim_api(apim_instance).get_all_apis()
     apim_apis = [api for api in apim_apis if ';rev=' not in api.name]
 
-    # Get list of APIS in custom data file, to be used when scafolding file.
-    custom_data_api_list = apic.get_custom_data_api_list(custom_data_file_path)
-
     for api in apim_apis:
+
+        # Get list of APIS in custom data file, to be used when scafolding file.
+        custom_data_api_list = apic.get_custom_data_api_list(custom_data_file_path)
      
         if api.description is not None:
             # Get documentation URL if description is not None. Search tearm is set with the DOCUMENTATION_URL_STRING_FILTER environment variable.
             documentation_url = apic.get_documentation_url(api.description, documentation_url_string_filter)
 
-        if api.name not in custom_data_api_list:
+        if api.display_name not in custom_data_api_list:
             # Add API scaffolding to custom data file. Values will then need to be added manually.
             apic.add_api_to_custom_data(custom_data_file_path, api.name, api.display_name, documentation_url, custom_data_key)
 
         # Update API URL in custom data file.
         apic.update_apim_api_url(custom_data_file_path, api.name, apim_domain, api.path)
+
+        # Update API versions in custom data file.
+        if api.api_version_set_id:
+            apic.update_versions(custom_data_file_path, api.name, api.display_name)
         
         # Generate custom data object for API data injection.
         custom_data = apic.gen_custom_data(custom_data_file_path, api.name)
 
-        # New instance of an API Center API
-        apic_api = apic.apic_api(api_center_instance, api.name, api.description, custom_data, documentation_url)
-
-        # Create API in API Center and print response code.
-        print(apic_api.new_apic_api().json)
+        # Create / update API in API Center and add versions where multiple exist.
+        apic_api = apic.apic_api(api_center_instance, api.name, api.display_name, api.description, custom_data, documentation_url)
+        apic_api.new_apic_api()
+        apic_api.new_apic_api_version()
 
 if __name__ == "__main__":
     main()

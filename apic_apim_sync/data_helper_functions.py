@@ -49,7 +49,7 @@ def add_api_to_custom_data(custom_data_file_path, api_name, api_display_name, do
 
     properties_dict = {i: None for i in custom_data_key}
     custom_data = read_json_file(custom_data_file_path)
-    custom_data.append({'api': api_name, 'api_display_name': api_display_name, 'documentation_url': documentation_url, 'properties': properties_dict})
+    custom_data.append({'api': api_display_name, 'documentation_url': documentation_url, 'properties': properties_dict})
     with open(custom_data_file_path, 'w') as f:
         json.dump(custom_data, f, indent=4)
 
@@ -77,6 +77,23 @@ def update_apim_api_url(custom_data_file_path, api_name, apim_domain, api_path):
     for api in data:
         if api['api'] == api_name:
             api['properties']['apim_api_url'] = f'{apim_domain}/{api_path}'
+
+    with open(custom_data_file_path, 'w') as api_data:
+        json.dump(data, api_data, indent=4)
+
+def update_versions(custom_data_file_path, api_name, api_display_name):
+    with open(custom_data_file_path, 'r') as api_data:
+        data = json.load(api_data)
+
+    for api in data:
+        if api['api'] == api_display_name:
+            if 'versions' in api:
+                if isinstance(api['versions'], list):
+                    api['versions'].append(api_name)
+                else:
+                    api['versions'] = [api['versions'], api_name]
+            else:
+                api['versions'] = [api_name]
 
     with open(custom_data_file_path, 'w') as api_data:
         json.dump(data, api_data, indent=4)
