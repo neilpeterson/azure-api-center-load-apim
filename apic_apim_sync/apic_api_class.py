@@ -3,9 +3,10 @@ import json
 import requests
 
 class apic_api():
-    def __init__(self, api_center, api_name, api_description, custom_data, documentation_url):
+    def __init__(self, api_center, api_name, api_diaplay_name, api_description, custom_data, documentation_url):
         self.api_center = api_center
         self.api_name = api_name
+        self.api_display_name = api_diaplay_name
         self.api_description = api_description
         self.custom_data = custom_data
         self.documentation_url = documentation_url
@@ -20,7 +21,7 @@ class apic_api():
         credential = DefaultAzureCredential()
         token = credential.get_token('https://management.azure.com/.default')
         
-        url = f"https://management.azure.com/subscriptions/{self.api_center.subscription_id}/resourceGroups/{self.api_center.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.api_center.name}/workspaces/{self.api_center.api_center_workspace_name}/apis/{self.api_name}?api-version={self.api_center.api_center_rest_api_version}"
+        url = f"https://management.azure.com/subscriptions/{self.api_center.subscription_id}/resourceGroups/{self.api_center.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.api_center.name}/workspaces/{self.api_center.api_center_workspace_name}/apis/{self.api_display_name}?api-version={self.api_center.api_center_rest_api_version}"
 
         headers = {
             'Authorization': 'Bearer ' + token.token,
@@ -29,10 +30,11 @@ class apic_api():
 
         body = {
             'properties': {
-                'title': self.api_name,
+                'title': self.api_display_name,
                 'kind': 'rest',
-                # 'description': self.api_description, # Removing for now while we sort description parsing
+                # 'description': self.api_description, # Removing for now while we sort description parsing.
                 'customProperties': self.custom_data,
+                # 'lifecycle': 'Production', # Need to make dynamic once we know what we want to do with this.
                 'externalDocumentation': [
                     {
                         'title': 'API Documentation',
@@ -42,9 +44,34 @@ class apic_api():
             }
         }
 
-        # TODO - This should return instance of API Center API class
         return requests.put(url, headers=headers, data=json.dumps(body))
     
+    def new_apic_api_version(self):
+        
+        """
+        This function creates a new API version for a given API in Azure API Center.
+        """
+        
+        credential = DefaultAzureCredential()
+        token = credential.get_token('https://management.azure.com/.default')
+        
+        url = f"https://management.azure.com/subscriptions/{self.api_center.subscription_id}/resourceGroups/{self.api_center.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.api_center.name}/workspaces/{self.api_center.api_center_workspace_name}/apis/{self.api_display_name}/versions/{self.api_name}?api-version={self.api_center.api_center_rest_api_version}"
+
+        headers = {
+            'Authorization': 'Bearer ' + token.token,
+            'Content-Type': 'application/json'
+        }
+
+        body = {
+            'properties': {
+                'title': self.api_name,
+                'lifecycleStage': 'Production' # Need to make dynamic once we know what we want to do with this.
+            }
+        }
+
+        response = requests.put(url, headers=headers, data=json.dumps(body))
+        return response
+
     def get_apic_api(self):
         
         """
@@ -55,12 +82,11 @@ class apic_api():
         credential = DefaultAzureCredential()
         token = credential.get_token('https://management.azure.com/.default')
         
-        url = f"https://management.azure.com/subscriptions/{self.subcription_id}/resourceGroups/{self.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.name}/workspaces/{self.api_center_workspace_name}/apis/{self.api_name}?api-version={self.azure_rest_api_version}"
+        url = f"https://management.azure.com/subscriptions/{self.api_center.subscription_id}/resourceGroups/{self.api_center.resource_group_name}/providers/Microsoft.ApiCenter/services/{self.api_center.name}/workspaces/{self.api_center.api_center_workspace_name}/apis/{self.api_display_name}?api-version={self.api_center.api_center_rest_api_version}"
 
         headers = {
             'Authorization': 'Bearer ' + token.token,
             'Content-Type': 'application/json'
         }
 
-        # TODO - This should return instance of API Center API class
         return requests.get(url, headers=headers)
