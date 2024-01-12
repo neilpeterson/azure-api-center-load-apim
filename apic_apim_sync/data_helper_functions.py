@@ -89,9 +89,11 @@ def update_versions(custom_data_file_path, api_name, api_display_name):
         if api['api'] == api_display_name:
             if 'versions' in api:
                 if isinstance(api['versions'], list):
-                    api['versions'].append(api_name)
+                    if api_name not in api['versions']:
+                        api['versions'].append(api_name)
                 else:
-                    api['versions'] = [api['versions'], api_name]
+                    if api['versions'] != api_name:
+                        api['versions'] = [api['versions'], api_name]
             else:
                 api['versions'] = [api_name]
 

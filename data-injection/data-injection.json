@@ -1,1 +1,25 @@
-[]
+[
+    {
+        "api": "apim-lab-app-service",
+        "documentation_url": "https://sail/docs.com",
+        "properties": {
+            "apim_api_url": "https://api.ppe.supplychain.microsoft.com/",
+            "service_tree_id": "47750fbe-7049-47cb-b19e-58cdc7ec556a",
+            "partner_facing": "False"
+        },
+        "versions": [
+            "apim-lab-app-service",
+            "apim-lab-app-service-v2",
+            "apim-lab-app-service-v3"
+        ]
+    },
+    {
+        "api": "apim-lab-app-service-eastus",
+        "documentation_url": null,
+        "properties": {
+            "apim_api_url": "https://api.ppe.supplychain.microsoft.com/east",
+            "service_tree_id": "9acea7c0-7470-4039-bf86-52f68f1a17bd",
+            "partner_facing": "True"
+        }
+    }
+]

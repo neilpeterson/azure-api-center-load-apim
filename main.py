@@ -43,14 +43,14 @@ def main():
             apic.add_api_to_custom_data(custom_data_file_path, api.name, api.display_name, documentation_url, custom_data_key)
 
         # Update API URL in custom data file.
-        apic.update_apim_api_url(custom_data_file_path, api.name, apim_domain, api.path)
+        apic.update_apim_api_url(custom_data_file_path, api.display_name, apim_domain, api.path)
 
         # Update API versions in custom data file.
         if api.api_version_set_id:
             apic.update_versions(custom_data_file_path, api.name, api.display_name)
         
         # Generate custom data object for API data injection.
-        custom_data = apic.gen_custom_data(custom_data_file_path, api.name)
+        custom_data = apic.gen_custom_data(custom_data_file_path, api.display_name)
 
         # Create / update API in API Center and add versions where multiple exist.
         apic_api = apic.apic_api(api_center_instance, api.name, api.display_name, api.description, custom_data, documentation_url)
