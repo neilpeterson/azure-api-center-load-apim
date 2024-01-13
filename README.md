@@ -7,11 +7,12 @@ Gets a list of APIs from Azure API Management Gateway (APIM) and loads them into
 Update with appropriate values for your environment, this assumes a PowerShell environment. These can be set as configuration settigns in an Azure Function.
 
 ```
-$env:AZURE_SUBSCRIPTION_ID = ""
+$env:APIC_SUBSCRIPTION_ID = ""
 $env:RESOURCE_GROUP_NAME = ""
 $env:API_CENTER_NAME = ""
 $env:API_CENTER_WORKSPACE_NAME = "default"
 $env:API_CENTER_REST_API_VERSION = "2024-03-01"
+$env:APIM_SUBSCRIPTION_ID = ""
 $env:APIM_RESOURCE_GROUP_NAME = ""
 $env:APIM_NAME = ""
 $env:DATA_INJECT_DICT_PATH = "./data-injection/data-injection.json"
