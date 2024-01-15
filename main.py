@@ -32,10 +32,6 @@ def main():
 
     for api in apim_apis:
 
-        print("--------------------")
-        print(api.display_name)
-        print("--------------------")
-
         # Get list of APIS in custom data file, to be used when scafolding file.
         custom_data_api_list = apic.get_custom_data_api_list(custom_data_file_path)
      
@@ -59,8 +55,23 @@ def main():
 
         # Create / update API in API Center and add versions where multiple exist.
         apic_api = apic.apic_api(api_center_instance, api.name, api.display_name, api.description, custom_data, documentation_url)
+        
+        print(api.name)
+        print(api.display_name)
+        print("----- Create API ------")
         print(apic_api.new_apic_api().text)
+        print("----- Create API Version ------" )
         print(apic_api.new_apic_api_version().text)
+        print("-----------------------------")
+        
+        with open('log.txt', 'a') as f:
+            f.write(api.name + "\n")
+            f.write(api.display_name + "\n")
+            f.write("----- Create API ------" + "\n")
+            f.write(apic_api.new_apic_api().text + "\n")
+            f.write("----- Create API Version ------" + "\n")
+            f.write(apic_api.new_apic_api_version().text + "\n")
+            f.write("-----------------------------" + "\n")
 
 if __name__ == "__main__":
     main()
